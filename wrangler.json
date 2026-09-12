@@ -8,6 +8,10 @@
 		"enabled": true
 	},
 	"upload_source_maps": true,
+	"routes": [
+		{ "pattern": "leiqu.org", "custom_domain": true },
+		{ "pattern": "www.leiqu.org", "custom_domain": true }
+	],
 	"vars": {
 		"APP_NAME": "雷区",
 		"APP_TAGLINE": "看见真实，提前避坑"
@@ -16,7 +20,7 @@
 		{
 			"binding": "DB",
 			"database_name": "liequ-db",
-			"database_id": "00000000-0000-0000-0000-000000000000",
+			"database_id": "f8e645a5-b9ea-47a0-baaa-24a161b3e9c5",
 			"migrations_dir": "migrations"
 		}
 	]
