@@ -7,32 +7,26 @@ import {
 	ScrollRestoration,
 } from "react-router";
 
+import { SiteFooter } from "~/components/site-footer";
+import { SiteHeader } from "~/components/site-header";
+import { buildMeta } from "~/lib/meta";
 import type { Route } from "./+types/root";
 import "./app.css";
 
-export const links: Route.LinksFunction = () => [
-	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
-	{
-		rel: "preconnect",
-		href: "https://fonts.gstatic.com",
-		crossOrigin: "anonymous",
-	},
-	{
-		rel: "stylesheet",
-		href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-	},
-];
+export function meta({ location }: Route.MetaArgs) {
+	return buildMeta({ path: location.pathname });
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en">
+		<html lang="zh-CN">
 			<head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<Meta />
 				<Links />
 			</head>
-			<body>
+			<body className="flex min-h-screen flex-col overflow-x-hidden">
 				{children}
 				<ScrollRestoration />
 				<Scripts />
@@ -42,34 +36,44 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	return <Outlet />;
+	return (
+		<>
+			<SiteHeader />
+			<main className="flex-1">
+				<Outlet />
+			</main>
+			<SiteFooter />
+		</>
+	);
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-	let message = "Oops!";
-	let details = "An unexpected error occurred.";
-	let stack: string | undefined;
+	let title = "出错了";
+	let details = "页面遇到了意外问题，请稍后重试。";
 
 	if (isRouteErrorResponse(error)) {
-		message = error.status === 404 ? "404" : "Error";
-		details =
-			error.status === 404
-				? "The requested page could not be found."
-				: error.statusText || details;
-	} else if (import.meta.env.DEV && error && error instanceof Error) {
+		if (error.status === 404) {
+			title = "404 · 页面走丢了";
+			details = "你要找的帖子或页面不存在，可能已被删除。";
+		} else {
+			title = `${error.status} · ${error.statusText || "请求失败"}`;
+			details = error.data || details;
+		}
+	} else if (import.meta.env.DEV && error instanceof Error) {
 		details = error.message;
-		stack = error.stack;
 	}
 
 	return (
-		<main className="pt-16 p-4 container mx-auto">
-			<h1>{message}</h1>
-			<p>{details}</p>
-			{stack && (
-				<pre className="w-full p-4 overflow-x-auto">
-					<code>{stack}</code>
-				</pre>
-			)}
-		</main>
+		<div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 text-center">
+			<div className="text-5xl">🛡️</div>
+			<h1 className="mt-6 text-2xl font-bold text-slate-900">{title}</h1>
+			<p className="mt-3 max-w-md text-sm text-slate-500">{details}</p>
+			<a
+				href="/"
+				className="mt-8 rounded-full bg-brand-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
+			>
+				返回首页
+			</a>
+		</div>
 	);
 }

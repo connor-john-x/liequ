@@ -40,7 +40,9 @@
 		"deploy": "wrangler deploy",
 		"dev": "react-router dev",
 		"preview": "npm run build && vite preview",
-		"typecheck": "npm run typegen && tsc -b"
+		"typecheck": "react-router typegen && tsc -b",
+		"db:migrate": "wrangler d1 migrations apply liequ-db --remote",
+		"db:migrate:local": "wrangler d1 migrations apply liequ-db --local"
 	},
 	"type": "module"
 }

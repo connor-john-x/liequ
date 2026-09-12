@@ -9,6 +9,15 @@
 	},
 	"upload_source_maps": true,
 	"vars": {
-		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare"
-	}
+		"APP_NAME": "雷区",
+		"APP_TAGLINE": "看见真实，提前避坑"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "liequ-db",
+			"database_id": "00000000-0000-0000-0000-000000000000",
+			"migrations_dir": "migrations"
+		}
+	]
 }
